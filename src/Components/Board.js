@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import BoardFooter from "./BoardFooter";
 import Computer from "./Computer";
+
 import Square from "./Square";
 
 class Board extends Component {
@@ -31,8 +32,8 @@ class Board extends Component {
       updatedBoard[index] = this.state.move;
     }
     if (this.state.move === "X") {
-      move = "Y";
-    } else if (this.state.move === "Y") {
+      move = "O";
+    } else if (this.state.move === "O") {
       move = "X";
     }
     this.setState({
@@ -49,6 +50,31 @@ class Board extends Component {
       winner: ""
     });
   };
+  boardResize = e => {
+    e.preventDefault();
+    const num = parseInt(e.target.value, 10);
+    const finalNum = Math.pow(num, 2);
+    if (num < 10) {
+      this.setState({
+        board: new Array(finalNum).fill("")
+      });
+    } else {
+      if (
+        window.confirm(
+          `Do you really have time to finish a game w/ ${finalNum} moves ?`
+        )
+      ) {
+        this.setState({
+          board: new Array(finalNum).fill("")
+        });
+        window.alert("Ok hold your horses, just a second");
+      } else {
+        this.setState({
+          board: new Array(9).fill("")
+        });
+      }
+    }
+  };
   computerMove = id => {
     this.assignMove(id);
   };
@@ -63,41 +89,87 @@ class Board extends Component {
     if (this.state.gameOver === true) {
       return null;
     }
+    const boardArray = this.state.board;
+    const root = parseInt(Math.sqrt(boardArray.length));
+    //start with false for if statement but switch to true at start of grading arrays
     let aWin = false;
     let id = "";
-    const boardArray = this.state.board;
-    // let root = Math.sqrt(boardArray.length);
-    // let check = "m";
-    // for (let i = 0; i < boardArray.length; i++) {
-    //   if (boardArray[i] !== "") {
-    //     check = boardArray[i];
-    //   }
-    // }
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        boardArray[a] &&
-        boardArray[a] === boardArray[b] &&
-        boardArray[a] === boardArray[c]
-      ) {
-        console.log("Winner");
-        aWin = true;
-        id = boardArray[a];
+    let diagonalArray = [];
+    let diagonalTwoArray = [];
+    let horizontalArray = [];
+    let verticalArray = [];
+    let ultimateAnswerArray = [];
+
+    let current = 0;
+    //create the horizontal grading array
+    for (let i = 0; i < root; i++) {
+      horizontalArray[i] = new Array(root);
+      for (let j = 0; j < root; j++) {
+        horizontalArray[i][j] = current;
+        current++;
       }
     }
+    // console.log(horizontalArray);
+    //then the vertical
+    for (let i = 0; i < root; i++) {
+      verticalArray[i] = new Array(root);
+      for (let j = 0; j < root; j++) {
+        verticalArray[i][j] = horizontalArray[j][i];
+      }
+    }
+    // console.log(verticalArray);
+    // then the diagonals
+    for (let i = 0; i < 1; i++) {
+      for (let j = 0; j < root; j++) {
+        diagonalArray[j] = horizontalArray[j][j];
+      }
+    }
+    // console.log(diagonalArray + " Diagonals");
+    //Then the second diagonal
+
+    for (let i = 0; i < 1; i++) {
+      for (let j = 0; j < root; j++) {
+        diagonalTwoArray[j] = horizontalArray[j][root - 1 - j];
+      }
+    }
+    // console.log(diagonalTwoArray + " diagonal two array");
+
+    ultimateAnswerArray.push(
+      diagonalArray,
+      diagonalTwoArray,
+      ...verticalArray,
+      ...horizontalArray
+    );
+    //then grade it after putting all the possible array matches together
+
+    const gradeThisSucker = (ultimateAnswerArray, boardArray) => {
+      for (let i = 0; i < ultimateAnswerArray.length; i++) {
+        let firstCheck = boardArray[ultimateAnswerArray[i][0]];
+        console.log(firstCheck + " first Check and i = " + i);
+        if (firstCheck === "X" || firstCheck === "O") {
+          let realCheck = firstCheck;
+          console.log(realCheck + "  realcheck");
+          aWin = true;
+          for (let j = 0; j < root; j++) {
+            console.log(realCheck + " j equals " + j);
+            if (boardArray[ultimateAnswerArray[i][j]] !== realCheck) {
+              aWin = false;
+              console.log("failed the check + real check " + realCheck);
+              return;
+            } else {
+              aWin = true;
+            }
+          }
+          return aWin;
+        }
+      }
+    };
+    gradeThisSucker(ultimateAnswerArray, boardArray);
+
     if (aWin !== true) {
       return null;
     } else if (aWin === true) {
+      console.log("Winner");
       this.declareWinner(id);
     }
   };
@@ -111,7 +183,7 @@ class Board extends Component {
     return finalString;
   };
   renderBoard = board => {
-    console.log(board);
+    // console.log(board);
     return board.map((item, index) => {
       return (
         <Square
@@ -153,7 +225,6 @@ class Board extends Component {
         >
           {this.renderBoard(this.state.board)}
         </div>
-
         <BoardFooter
           reset={() => this.boardReset()}
           currentUser={this.state.computerFirst}
@@ -165,6 +236,10 @@ class Board extends Component {
           currentMove={this.state.currentMoveHuman}
           gameOver={this.state.gameOver}
         />
+        <div>
+          <label> Board Width</label>
+          <input type="text" onChange={e => this.boardResize(e)} />
+        </div>
       </div>
     );
   }
