@@ -8,7 +8,9 @@ const BoardFooter = props => {
         <div>
           The Computer will go first, press start when ready
           <br />
-          <button onClick={() => props.startComputer()}>start</button>
+          <button className="start" onClick={() => props.startComputer()}>
+            start
+          </button>
         </div>
       ) : (
         ""

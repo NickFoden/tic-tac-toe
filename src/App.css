@@ -63,6 +63,10 @@ button {
   min-height: 2rem;
 }
 
+.start {
+  background-color: lightgreen;
+}
+
 .unclaimed {
   background-color: lightgray;
 }

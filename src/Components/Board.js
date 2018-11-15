@@ -21,7 +21,6 @@ class Board extends Component {
       winsComputer: 0,
       winsPerson: 0
     };
-    this.assignMove = this.assignMove.bind(this);
   }
 
   assignMove = index => {
@@ -67,26 +66,30 @@ class Board extends Component {
   };
   boardResize = e => {
     e.preventDefault();
-    const num = parseInt(e.target.value, 10);
-    const finalNum = Math.pow(num, 2);
-    if (num < 10) {
-      this.setState({
-        board: new Array(finalNum).fill("")
-      });
-    } else {
-      if (
-        window.confirm(
-          `Do you really have time to finish a game w/ ${finalNum} moves ?`
-        )
-      ) {
+    if (e.target.value) {
+      const num = parseInt(e.target.value, 10);
+      const finalNum = Math.pow(num, 2);
+
+      if (num < 10) {
         this.setState({
           board: new Array(finalNum).fill("")
         });
-        window.alert("Ok hold your horses, just a second");
+      } else if (finalNum !== NaN || num !== NaN) {
+        if (
+          window.confirm(
+            `Do you really have time to finish a game w/ ${finalNum} moves ?`
+          )
+        ) {
+          this.setState({
+            board: new Array(finalNum).fill("")
+          });
+          window.alert("Ok hold your horses, just a second");
+        } else {
+          this.setState({
+            board: new Array(9).fill("")
+          });
+        }
       } else {
-        this.setState({
-          board: new Array(9).fill("")
-        });
       }
     }
   };
