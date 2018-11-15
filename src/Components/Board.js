@@ -159,50 +159,29 @@ class Board extends Component {
       ...horizontalArray
     );
     const gradeThisSucker = (ultimateAnswerArray, boardArray) => {
-      for (let i = 0; i < ultimateAnswerArray.length; i++) {
+      const finalLength = ultimateAnswerArray.length;
+      for (let i = 0; i < finalLength; i++) {
         let firstCheck = boardArray[ultimateAnswerArray[i][0]];
-        console.log(firstCheck + " first Check and i = " + i);
+        console.log(firstCheck + ": check " + i);
         if (firstCheck === "X" || firstCheck === "O") {
-          let realCheck = firstCheck;
-          console.log(realCheck + "  realcheck");
           aWin = true;
           for (let j = 0; j < root; j++) {
-            console.log(realCheck + " j equals " + j);
-            if (boardArray[ultimateAnswerArray[i][j]] !== realCheck) {
+            if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
               aWin = false;
-              console.log("failed the check + real check " + realCheck);
-              return;
-            } else {
-              aWin = true;
+              console.log("failed the check " + firstCheck);
+              break;
             }
-          }
-          if (aWin === true) {
-            return aWin;
+
+            if (boardArray[ultimateAnswerArray[i][root]] === firstCheck) {
+              console.log("Winner");
+              this.declareWinner(firstCheck);
+            }
           }
         }
       }
     };
-    gradeThisSucker(ultimateAnswerArray, boardArray);
-    {
-      /*//then grade it after putting all the possible array matches together
-    for (let i = 0; i < ultimateAnswerArray.length; i++) {
-      let firstCheck = boardArray[ultimateAnswerArray[i][0]];
-      for (let j = 0; j < root; j++) {
-        if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
-          aWin = false;
-        }
-        return aWin;
-      }
-      console.log(aWin + " line 172");
-    } */
-    }
 
-    if (aWin !== true) {
-      return null;
-    } else if (aWin === true) {
-      console.log("Winner");
-      this.declareWinner(id);
-    }
+    gradeThisSucker(ultimateAnswerArray, boardArray);
   };
 
   grids = board => {
