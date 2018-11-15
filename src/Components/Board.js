@@ -50,6 +50,7 @@ class Board extends Component {
     });
   };
   boardReset = () => {
+    //except not total number of wins
     this.setState({
       board: new Array(9).fill(""),
       computerFirst: false,
@@ -59,9 +60,7 @@ class Board extends Component {
       gameUnderway: false,
       next: true,
       move: "X",
-      winner: "",
-      winsComputer: 0,
-      winsPerson: 0
+      winner: ""
     });
   };
   boardResize = e => {
@@ -121,7 +120,6 @@ class Board extends Component {
     const root = parseInt(Math.sqrt(boardArray.length));
     //start with false for if statement but switch to true at start of grading arrays
     let aWin = false;
-    let id = "";
     let diagonalArray = [];
     let diagonalTwoArray = [];
     let horizontalArray = [];
@@ -160,7 +158,6 @@ class Board extends Component {
         diagonalTwoArray[j] = horizontalArray[j][root - 1 - j];
       }
     }
-    // console.log(diagonalTwoArray + " diagonal two array");
 
     ultimateAnswerArray.push(
       diagonalArray,
@@ -172,17 +169,20 @@ class Board extends Component {
     const finalLength = ultimateAnswerArray.length;
     for (let i = 0; i < finalLength; i++) {
       let firstCheck = boardArray[ultimateAnswerArray[i][0]];
-      console.log(firstCheck + ": check " + i);
+
       if (firstCheck === "X" || firstCheck === "O") {
         aWin = true;
         for (let j = 0; j < root; j++) {
+          console.log("answer of " + ultimateAnswerArray[i][j]);
+          console.log("board array " + boardArray[ultimateAnswerArray[i][j]]);
           if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
             aWin = false;
             console.log("failed the check " + firstCheck);
             break;
-          }
-
-          if (boardArray[ultimateAnswerArray[i][root]] === firstCheck) {
+          } else if (
+            j === root - 1 &&
+            boardArray[ultimateAnswerArray[i][root - 1]] === firstCheck
+          ) {
             console.log("Winner");
             this.declareWinner(firstCheck);
           }
@@ -258,8 +258,6 @@ class Board extends Component {
               : "O and computer will go after 1 sec"}
           </label>
           <br />
-          <br />
-          <label> (Grading under construction)</label>
           <br />
           <br />
           <label> Board Width : </label>
