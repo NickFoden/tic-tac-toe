@@ -9,7 +9,14 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Game Time</h1>
+          <a
+            className="App-title-link"
+            href="https://www.wikihow.com/Win-at-Tic-Tac-Toe"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <h1 className="App-title">Welcome ! Try and beat the 💻 </h1>
+          </a>
         </header>
         <Board />
       </div>

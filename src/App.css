@@ -19,14 +19,19 @@ button {
   padding: 20px;
 }
 
+.App-intro {
+  font-size: large;
+}
+
 .App-title {
   font-size: 2em;
   font-weight: 1000;
   line-height: 3em;
 }
 
-.App-intro {
-  font-size: large;
+.App-title-link {
+  text-decoration: none;
+  color: black;
 }
 
 .board-container {
