@@ -15,7 +15,7 @@ class App extends React.Component {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <h1 className="App-title">Welcome ! Try and beat the 💻 </h1>
+            <h1 className="App-title">Welcome! Try and beat the 💻 </h1>
           </a>
         </header>
         <Board />
