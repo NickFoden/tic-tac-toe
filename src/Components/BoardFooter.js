@@ -18,11 +18,11 @@ const BoardFooter = props => {
         <div>
           {props.currentUser ? (
             <button onClick={() => props.toggleComputer()}>
-              You first this time?
+              Change order to you first this time?
             </button>
           ) : (
             <button onClick={() => props.toggleComputer()}>
-              Computer first this time?
+              Change order to computer first this time?
             </button>
           )}
         </div>

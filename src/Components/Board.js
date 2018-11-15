@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import BoardFooter from "./BoardFooter";
 import Computer from "./Computer";
+import History from "./History";
 
 import Square from "./Square";
 
@@ -16,7 +17,9 @@ class Board extends Component {
       gameUnderway: false,
       next: true,
       move: "X",
-      winner: ""
+      winner: "",
+      winsComputer: 0,
+      winsPerson: 0
     };
     this.assignMove = this.assignMove.bind(this);
   }
@@ -57,7 +60,9 @@ class Board extends Component {
       gameUnderway: false,
       next: true,
       move: "X",
-      winner: ""
+      winner: "",
+      winsComputer: 0,
+      winsPerson: 0
     });
   };
   boardResize = e => {
@@ -91,15 +96,17 @@ class Board extends Component {
   declareWinner = id => {
     if (id === this.state.computerSymbol) {
       this.setState({
-        winner: "Computer takes another one",
         gameOver: true,
-        gameUnderway: false
+        gameUnderway: false,
+        winner: "Computer takes another one",
+        winsComputer: this.state.winsComputer++
       });
     } else {
       this.setState({
-        winner: "You won!",
         gameOver: true,
-        gameUnderway: false
+        gameUnderway: false,
+        winner: "You won!",
+        winsPerson: this.state.winsPerson++
       });
     }
   };
@@ -158,30 +165,27 @@ class Board extends Component {
       ...verticalArray,
       ...horizontalArray
     );
-    const gradeThisSucker = (ultimateAnswerArray, boardArray) => {
-      const finalLength = ultimateAnswerArray.length;
-      for (let i = 0; i < finalLength; i++) {
-        let firstCheck = boardArray[ultimateAnswerArray[i][0]];
-        console.log(firstCheck + ": check " + i);
-        if (firstCheck === "X" || firstCheck === "O") {
-          aWin = true;
-          for (let j = 0; j < root; j++) {
-            if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
-              aWin = false;
-              console.log("failed the check " + firstCheck);
-              break;
-            }
 
-            if (boardArray[ultimateAnswerArray[i][root]] === firstCheck) {
-              console.log("Winner");
-              this.declareWinner(firstCheck);
-            }
+    const finalLength = ultimateAnswerArray.length;
+    for (let i = 0; i < finalLength; i++) {
+      let firstCheck = boardArray[ultimateAnswerArray[i][0]];
+      console.log(firstCheck + ": check " + i);
+      if (firstCheck === "X" || firstCheck === "O") {
+        aWin = true;
+        for (let j = 0; j < root; j++) {
+          if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
+            aWin = false;
+            console.log("failed the check " + firstCheck);
+            break;
+          }
+
+          if (boardArray[ultimateAnswerArray[i][root]] === firstCheck) {
+            console.log("Winner");
+            this.declareWinner(firstCheck);
           }
         }
       }
-    };
-
-    gradeThisSucker(ultimateAnswerArray, boardArray);
+    }
   };
 
   grids = board => {
@@ -245,8 +249,14 @@ class Board extends Component {
         <div>
           <br />
           <label>
-            You are: {this.state.computerSymbol === "O" ? "X" : "O"}
+            You are:{" "}
+            {this.state.computerSymbol === "O"
+              ? "X and go first"
+              : "O and computer will go after 1 sec"}
           </label>
+          <br />
+          <br />
+          <label> (Grading under construction)</label>
           <br />
           <br />
           <label> Board Width : </label>
@@ -270,6 +280,11 @@ class Board extends Component {
           gameOver={this.state.gameOver}
           computerSymbol={this.state.computerSymbol}
         />
+        <History
+          winsComputer={this.state.winsComputer}
+          winsPerson={this.state.winsPerson}
+        />
+        <p>(Open console logs to see computer moves)</p>
       </div>
     );
   }
