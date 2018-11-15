@@ -1,37 +1,64 @@
+* {
+  font-family: "Lato", sans-serif;
+}
+
+button {
+  border-radius: 5px;
+  padding: 15px;
+  margin: 5px;
+}
 .App {
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: #b2cee5;
+  color: black;
+  height: 120px;
   padding: 20px;
-  color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+  font-size: 2em;
+  font-weight: 1000;
+  line-height: 3em;
 }
 
 .App-intro {
   font-size: large;
 }
-.boardContainer {
+.board-container {
+  margin-top: 50px;
+}
+.board-grid {
   border: 1px solid black;
   margin: 0 auto;
   width: 80%;
 }
-
+.O {
+  background-color: lightcoral;
+}
+.reset-button {
+  margin-top: 25px;
+}
 .square {
   cursor: pointer;
   border: 1px solid black;
   padding: 10px;
   line-height: 1rem;
   font-size: 1rem;
-  min-height: 1rem;
+  min-height: 2rem;
+}
+
+.unclaimed {
+  background-color: lightgray;
+}
+
+.winning-h1-message {
+  font-size: 4em;
+  font-weight: 1000;
+}
+
+.X {
+  background-color: lightgreen;
 }

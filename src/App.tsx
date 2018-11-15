@@ -8,7 +8,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Welcome to Tic Tac Toe</h1>
+          <h1 className="App-title">Game Time</h1>
         </header>
         <Game />
       </div>

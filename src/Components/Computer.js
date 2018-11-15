@@ -14,18 +14,20 @@ const Computer = props => {
       }
     }
     openOptions = options;
+    console.log("Computer options " + openOptions);
     let final = options[Math.floor(Math.random() * options.length)];
     selectMove(final);
-    // console.log(options + " first options");
+    console.log("Computer pick " + final);
   };
 
   if (gameOver === true) {
-    return <h1> Good Game Chap</h1>;
+    console.log(props.computerSymbol);
+    return <h1 className="winning-h1-message"> Good Game Chap</h1>;
   } else if (currentMove !== true && gameOver === false) {
     var options = [];
     setTimeout(() => {
       makeMove(props, options);
-    }, 5000);
+    }, 3000);
 
     return <ComputerOptions moves={openOptions} />;
   } else {

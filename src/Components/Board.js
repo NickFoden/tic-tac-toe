@@ -28,6 +28,11 @@ class Board extends Component {
     if (this.state.gameOver === true || updatedBoard[index] !== "") {
       return;
     }
+    if (this.state.gameUnderway === false) {
+      this.setState({
+        gameUnderway: true
+      });
+    }
     if (updatedBoard[index] === "") {
       updatedBoard[index] = this.state.move;
     }
@@ -45,8 +50,13 @@ class Board extends Component {
   boardReset = () => {
     this.setState({
       board: new Array(9).fill(""),
+      computerFirst: false,
+      computerSymbol: "O",
+      currentMoveHuman: true,
       gameOver: false,
       gameUnderway: false,
+      next: true,
+      move: "X",
       winner: ""
     });
   };
@@ -79,11 +89,19 @@ class Board extends Component {
     this.assignMove(id);
   };
   declareWinner = id => {
-    this.setState({
-      winner: id,
-      gameOver: true,
-      gameUnderway: false
-    });
+    if (id === this.state.computerSymbol) {
+      this.setState({
+        winner: "Computer takes another one",
+        gameOver: true,
+        gameUnderway: false
+      });
+    } else {
+      this.setState({
+        winner: "You won!",
+        gameOver: true,
+        gameUnderway: false
+      });
+    }
   };
   gradeTheGame = () => {
     if (this.state.gameOver === true) {
@@ -140,8 +158,6 @@ class Board extends Component {
       ...verticalArray,
       ...horizontalArray
     );
-    //then grade it after putting all the possible array matches together
-
     const gradeThisSucker = (ultimateAnswerArray, boardArray) => {
       for (let i = 0; i < ultimateAnswerArray.length; i++) {
         let firstCheck = boardArray[ultimateAnswerArray[i][0]];
@@ -160,11 +176,26 @@ class Board extends Component {
               aWin = true;
             }
           }
-          return aWin;
+          if (aWin === true) {
+            return aWin;
+          }
         }
       }
     };
     gradeThisSucker(ultimateAnswerArray, boardArray);
+    {
+      /*//then grade it after putting all the possible array matches together
+    for (let i = 0; i < ultimateAnswerArray.length; i++) {
+      let firstCheck = boardArray[ultimateAnswerArray[i][0]];
+      for (let j = 0; j < root; j++) {
+        if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
+          aWin = false;
+        }
+        return aWin;
+      }
+      console.log(aWin + " line 172");
+    } */
+    }
 
     if (aWin !== true) {
       return null;
@@ -188,6 +219,7 @@ class Board extends Component {
       return (
         <Square
           onSelect={() => this.assignMove(index)}
+          index={index}
           key={index}
           value={item}
         />
@@ -208,16 +240,22 @@ class Board extends Component {
     }
   };
 
+  startComputer = () => {
+    this.setState({
+      currentMoveHuman: false,
+      gameUnderway: true
+    });
+  };
+
   render() {
     {
       this.gradeTheGame();
     }
     return (
-      <div>
-        <h1>This is a board</h1>
-        {this.state.winner}
+      <div className="board-container">
+        <h1 className="winning-h1-message">{this.state.winner}</h1>
         <div
-          className="boardContainer"
+          className="board-grid"
           style={{
             display: "grid",
             gridTemplateColumns: this.grids(this.state.board)
@@ -225,21 +263,34 @@ class Board extends Component {
         >
           {this.renderBoard(this.state.board)}
         </div>
+        <div>
+          <br />
+          <label>
+            You are: {this.state.computerSymbol === "O" ? "X" : "O"}
+          </label>
+          <br />
+          <br />
+          <label> Board Width : </label>
+          <input
+            type="text"
+            onChange={e => this.boardResize(e)}
+            placeholder="3"
+          />
+        </div>
         <BoardFooter
           reset={() => this.boardReset()}
           currentUser={this.state.computerFirst}
           toggleComputer={() => this.toggleUser()}
+          startComputer={() => this.startComputer()}
+          gameStatus={this.state.gameUnderway}
         />
         <Computer
           board={this.state.board}
           selectMove={id => this.computerMove(id)}
           currentMove={this.state.currentMoveHuman}
           gameOver={this.state.gameOver}
+          computerSymbol={this.state.computerSymbol}
         />
-        <div>
-          <label> Board Width</label>
-          <input type="text" onChange={e => this.boardResize(e)} />
-        </div>
       </div>
     );
   }

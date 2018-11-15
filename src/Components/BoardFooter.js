@@ -4,29 +4,33 @@ const BoardFooter = props => {
   return (
     <div>
       <br />
-      {props.currentUser ? (
+      {props.currentUser && props.gameStatus === false ? (
         <div>
-          The Computer will go first
+          The Computer will go first, press start when ready
           <br />
-          <button>start</button>
+          <button onClick={() => props.startComputer()}>start</button>
         </div>
       ) : (
-        "Waiting on you . . ."
+        ""
       )}
       <br />
-      {props.currentUser ? (
-        <button onClick={() => props.toggleComputer()}>
-          You first this time?
-        </button>
-      ) : (
-        <button onClick={() => props.toggleComputer()}>
-          Or Computer first this time?
-        </button>
+      {props.gameStatus === false && (
+        <div>
+          {props.currentUser ? (
+            <button onClick={() => props.toggleComputer()}>
+              You first this time?
+            </button>
+          ) : (
+            <button onClick={() => props.toggleComputer()}>
+              Computer first this time?
+            </button>
+          )}
+        </div>
       )}
-      <br />
-      <br />
-      <button onClick={() => props.reset()}> Reset the game</button>
-      <br />
+
+      <button className="reset-button" onClick={() => props.reset()}>
+        Reset the game
+      </button>
     </div>
   );
 };
