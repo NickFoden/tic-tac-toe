@@ -101,14 +101,14 @@ class Board extends Component {
         gameOver: true,
         gameUnderway: false,
         winner: "Computer takes another one",
-        winsComputer: this.state.winsComputer++
+        winsComputer: this.state.winsComputer + 1
       });
     } else {
       this.setState({
         gameOver: true,
         gameUnderway: false,
         winner: "You won!",
-        winsPerson: this.state.winsPerson++
+        winsPerson: this.state.winsPerson + 1
       });
     }
   };
@@ -173,17 +173,15 @@ class Board extends Component {
       if (firstCheck === "X" || firstCheck === "O") {
         aWin = true;
         for (let j = 0; j < root; j++) {
-          console.log("answer of " + ultimateAnswerArray[i][j]);
-          console.log("board array " + boardArray[ultimateAnswerArray[i][j]]);
           if (boardArray[ultimateAnswerArray[i][j]] !== firstCheck) {
             aWin = false;
-            console.log("failed the check " + firstCheck);
+            // console.log("failed the check " + firstCheck);
             break;
           } else if (
             j === root - 1 &&
             boardArray[ultimateAnswerArray[i][root - 1]] === firstCheck
           ) {
-            console.log("Winner");
+            console.log("Winner is " + firstCheck);
             this.declareWinner(firstCheck);
           }
         }
@@ -200,7 +198,6 @@ class Board extends Component {
     return finalString;
   };
   renderBoard = board => {
-    // console.log(board);
     return board.map((item, index) => {
       return (
         <Square

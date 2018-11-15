@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { setTimeout } from "timers";
-import ComputerOptions from "./ComputerOptions";
+// import ComputerOptions from "./ComputerOptions";
 
 const Computer = props => {
   var openOptions = [];
@@ -24,7 +24,6 @@ const Computer = props => {
   };
 
   if (gameOver === true) {
-    console.log(props.computerSymbol);
     return <h1 className="winning-h1-message"> Good Game</h1>;
   } else if (currentMove !== true && gameOver === false) {
     var options = [];
